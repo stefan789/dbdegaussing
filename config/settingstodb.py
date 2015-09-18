@@ -15,13 +15,13 @@ args = parser.parse_args()
 
 settings = readconfig(args.fname)
 
-acct = cloudant.Account(uri="http://localhost:5984")
-res = acct.login("stefan", "root")
-assert res.status_code == 200
-
-#acct = cloudant.Account(uri="http://raid.nedm1")
-#res = acct.login("internal_coils_writer", "clu$terXz")
+#acct = cloudant.Account(uri="http://localhost:5984")
+#res = acct.login("stefan", "root")
 #assert res.status_code == 200
+
+acct = cloudant.Account(uri="http://raid.nedm1")
+res = acct.login("stefan", "hanger")
+assert res.status_code == 200
 
 # Grab the correct database
 db = acct["nedm%2Fdegaussing"]

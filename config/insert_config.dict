@@ -71,7 +71,7 @@
         "RelayPort": 11,
         "VoltageDivider": 5
     },
-    "Cyl": {
+    "cyl": {
         "Amp": 9.5,
         "Freq": 10,
         "Dur": 100,
