@@ -1,0 +1,5 @@
+{
+    "Name": "Insert all layers",
+    "Config": "insert_config",
+    "Sequence": ["1r", "1s", "1g", "2r", "2s", "2g", "3r", "3s", "3g"]
+}

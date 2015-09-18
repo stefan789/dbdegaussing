@@ -1,0 +1,5 @@
+{
+    "Name": "MSR all layers",
+    "Config": "msr_config",
+    "Sequence": ["L-coil"]
+}

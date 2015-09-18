@@ -1,0 +1,12 @@
+{
+    "Cyl": {
+        "Amp": 9.5,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 13,
+        "VoltageDivider": 1
+    },
+    "Offset": 0,
+    "Device": "Dev1"
+}

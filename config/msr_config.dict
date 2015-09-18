@@ -1,0 +1,36 @@
+{
+    "L-coil": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 50,
+        "Keep": 10,
+        "RelayPort": 0,
+        "VoltageDivider": 5
+    },
+   "A-X": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 1,
+        "VoltageDivider": 5
+    },
+    "A-Z": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 3,
+        "VoltageDivider": 5
+    },
+    "A-Y": {
+        "Amp": 8.7,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 2,
+        "VoltageDivider": 5
+    },
+    "Offset": 0,
+    "Device": "Dev1"
+}

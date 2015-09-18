@@ -1,0 +1,84 @@
+{
+    "1r": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 4,
+        "VoltageDivider": 3
+    },
+    "1s": {
+        "Amp": 9.8,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 6,
+        "VoltageDivider": 3
+    },
+	"1g": {
+        "Amp": 9.4,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 5,
+        "VoltageDivider": 3
+    },
+	"2r": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 7,
+        "VoltageDivider": 4
+    },
+    "2s": {
+        "Amp": 9.9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 9,
+        "VoltageDivider": 4
+    },
+    "2g": {
+        "Amp": 9.9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 8,
+        "VoltageDivider": 4
+    },
+    "3r": {
+        "Amp": 9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 10,
+        "VoltageDivider": 5
+    },
+    "3s": {
+        "Amp": 9.4,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 12,
+        "VoltageDivider": 5
+    },
+    "3g": {
+        "Amp": 9.9,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 11,
+        "VoltageDivider": 5
+    },
+    "Cyl": {
+        "Amp": 9.5,
+        "Freq": 10,
+        "Dur": 100,
+        "Keep": 10,
+        "RelayPort": 13,
+        "VoltageDivider": 1
+    },
+    "Offset": 0,
+    "Device": "Dev1"
+}
