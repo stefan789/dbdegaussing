@@ -60,9 +60,10 @@ class DegaussingController():
     def createWaveform(self, amp, freq, offset, duration, keeptime, sampleRate=20000):
         '''create waveform from given parameters'''
         t = np.linspace(0, duration, duration*sampleRate + 1)
-        data = offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp]))
-        #periodLength = len( data )
-        #data = np.zeros( (periodLength, ), dtype = np.float64)
+        x = offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp]))
+        periodLength = len( x )
+        data = np.zeros( (periodLength, ), dtype = np.float64)
+        data = x
         return np.asarray(list(zip(t,data)))
 
     """
