@@ -62,8 +62,9 @@ class DegaussingController():
         t = np.linspace(0, duration, duration*sampleRate + 1)
         x = offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp]))
         periodLength = len( x )
+        dat = np.asarray(x, dtype=np.float64)
         data = np.zeros( (periodLength, ), dtype = np.float64)
-        data = x
+        data = dat
         return np.asarray(list(zip(t,data)))
 
     """
