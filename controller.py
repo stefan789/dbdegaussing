@@ -77,8 +77,10 @@ class DegaussingController():
 
     def playWaveform(self, device, waveform):
         data = waveform[:,1]
+	print(np.max(data))
+	print(np.min(data))
         task = nidaqmx.AnalogOutputTask()
-        task.create_voltage_channel("Dev1/ao0", min_val = 10.0, max_val = 10.0)
+        task.create_voltage_channel("Dev1/ao0", min_val = -10.0, max_val = 10.0)
         task.configure_timing_sample_clock(rate = 20000)
         task.write(data, auto_start=False)
         task.start()
