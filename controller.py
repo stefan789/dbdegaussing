@@ -1,6 +1,6 @@
 import cloudant
 import json
-import pynedm
+#import pynedm
 import numpy as np
 import digiports as dg
 import waveformthread as wft
@@ -57,15 +57,14 @@ class DegaussingController():
 
         return settings
 
-    def createWaveform(self, amp, freq, offset, duration, keeptime, sampleRate=20000):
+    def createWaveform(self, amp, freq, offset, duration, keeptime, sampleRate=1000):
         '''create waveform from given parameters'''
         t = np.linspace(0, duration, duration*sampleRate + 1)
         x = offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp]))
         periodLength = len( x )
-        dat = np.asarray(x, dtype=np.float64)
         data = np.zeros( (periodLength, ), dtype = np.float64)
-        data = dat
-        return np.asarray(list(zip(t,data)))
+        data = x
+        return np.asarray(list(zip(t,data)), dtype=np.float64)
 
     """
     def playWaveform(self, device, waveform, sampleRate=20000):
@@ -75,21 +74,20 @@ class DegaussingController():
         self.mythread.__del__()
         self.mythread = None 
     """
-
-    def playWaveform(self, device, waveform):
-        data = waveform[:,1]
-	print(np.max(data))
-	print(np.min(data))
+    
+    def playWaveform(self, device, amp, freq, duration, keeptime, offset, sampleRate=10000.0):
+        t = np.linspace(0, duration, duration*sampleRate + 1)
+        x = np.asarray(offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp])), dtype=np.float64)
         task = nidaqmx.AnalogOutputTask()
-        task.create_voltage_channel("Dev1/ao0", min_val = -10.0, max_val = 10.0)
-        task.configure_timing_sample_clock(rate = 20000)
-        task.write(data, auto_start=False)
+        task.create_voltage_channel("Dev1/ao0", min_val=-10.0, max_val=10.0)
+        task.configure_timing_sample_clock(rate=sampleRate, sample_mode = 'finite' , samples_per_channel = len(x))
+        task.write(x, auto_start=False, layout='group_by_channel')
         task.start()
-        task.wait_until_done(110)
+        task.wait_until_done(duration + 5)
         task.stop()
         del task
 
-    def abortWaveform(self):
+    def abort_deg(self):
         if self.mythread:
             self._running = False
             self.mythread.stop()
@@ -102,11 +100,6 @@ class DegaussingController():
             if self._running:
                 cs = self.configs[self.settings[sett]["Config"]][coil]
                 print (coil, cs)
-                # create wv
-                print("Creating waveform with Amp = {0}, Freq = {1}, Dur = {2}, Keep = {3}".format(cs['Amp'], cs['Freq'],cs['Dur'], cs['Keep']))
-                wv = self.createWaveform(cs['Amp'], cs['Freq'], 0 ,cs['Dur'], cs['Keep'])
-                plt.plot(wv[:,1])
-                plt.show()
                 # all coils off
                 print("all coils off")
                 self.coilswitcher.alloff()
@@ -118,7 +111,7 @@ class DegaussingController():
                 self.coilswitcher.activate(cs["RelayPort"])
                 # play waveform
                 print("start waveform")
-                self.playWaveform(dev, wv)
+                self.playWaveform(dev, cs['Amp'], cs['Freq'] ,cs['Dur'], cs['Keep'], 0)
                 # deactivate coil
                 print("deactivate coil")
                 self.coilswitcher.deactivate(cs["RelayPort"])
