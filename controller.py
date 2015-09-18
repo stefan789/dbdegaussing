@@ -4,17 +4,20 @@ import pynedm
 import numpy as np
 import digiports as dg
 import waveformthread as wft
+import matplotlib.pyplot as plt
 
 class DegaussingController():
     def __init__(self):
         self.configs = self._getconfigs()
         self.settings = self._getsettings()
-        self.voltagedivider = dg.VoltageDivider()
-        self.coilswitcher = dg.SwitchCoil
+        self.voltagedivider = dg.VoltageDivider("Dev1")
+        self.coilswitcher = dg.SwitchCoil("Dev1")
 
     def _getconfigs(self):
-        acct = cloudant.Account(uri="http://localhost:5984")
-        res = acct.login("stefan", "root")
+        acct = cloudant.Account(uri="http://raid.nedm1")
+        res = acct.login("stefan", "hanger")
+        #acct = cloudant.Account(uri="http://localhost:5984")
+        #res = acct.login("stefan", "root")
         assert res.status_code == 200
 
         db = acct["nedm%2Fdegaussing"]
@@ -31,8 +34,11 @@ class DegaussingController():
         return confs
 
     def _getsettings(self):
-        acct = cloudant.Account(uri="http://localhost:5984")
-        res = acct.login("stefan", "root")
+        acct = cloudant.Account(uri="http://raid.nedm1")
+        res = acct.login("internal_coils_writer", "clu$terXz")
+
+        #acct = cloudant.Account(uri="http://localhost:5984")
+        #res = acct.login("stefan", "root")
         assert res.status_code == 200
 
         db = acct["nedm%2Fdegaussing"]
@@ -79,18 +85,27 @@ class DegaussingController():
                 cs = self.configs[self.settings[sett]["Config"]][coil]
                 print (coil, cs)
                 # create wv
+                print("Creating waveform with Amp = {0}, Freq = {1}, Dur = {2}, Keep = {3}".format(cs['Amp'], cs['Freq'],cs['Dur'], cs['Keep']))
                 wv = self.createWaveform(cs['Amp'], cs['Freq'], 0 ,cs['Dur'], cs['Keep'])
+                plt.plot(wv[:,1])
+                plt.show()
                 # all coils off
+                print("all coils off")
                 self.coilswitcher.alloff()
                 # set vd
+                print("setting voltagedivider {}".format(cs["VoltageDivider"]))
                 self.voltagedivider.setnr(cs["VoltageDivider"])
                 # activate coil
+                print("setting relay {}".format(cs["RelayPort"]))
                 self.coilswitcher.activate(cs["RelayPort"])
                 # play waveform
+                print("start waveform")
                 self.playWaveform(dev, wv)
                 # deactivate coil
+                print("deactivate coil")
                 self.coilswitcher.deactivate(cs["RelayPort"])
                 # vd.resetall()
+                print("voltagedivider reset all")
                 self.voltagedivider.resetall()
             else:
                 self.coilswitcher.alloff()

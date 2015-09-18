@@ -87,7 +87,7 @@ class SwitchCoil():
     def activate(self, nr):
         if nr > self.nrchans-1:
             pass
-        else:
+        elif nr < 4:
             curstate = self.di.read()
             if 0 in curstate:
                 curon = np.where(curstate==0)[0]
@@ -99,4 +99,8 @@ class SwitchCoil():
                 pass
             if curstate[nr] == 1:
                 self.do.switch(nr)
-        pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
+            pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
+        else:
+            self.do.switch(nr)
+            pub.sendMessage("status.update", status="Switching relay %s" % str(nr))
+            

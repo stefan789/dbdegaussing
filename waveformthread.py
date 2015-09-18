@@ -28,6 +28,7 @@ class WaveformThread(threading.Thread):
         self.time = waveform[:,0]
         self.taskHandle = TaskHandle( 0 )
         dev = str(self.device)
+        dev = "Dev1/ao0"
         self.CHK(nidaq.DAQmxCreateTask("", ctypes.byref( self.taskHandle )))
         self.CHK(nidaq.DAQmxCreateAOVoltageChan( self.taskHandle, dev, "", float64(-10.0), float64(10.0), DAQmx_Val_Volts, None))
         self.CHK(nidaq.DAQmxCfgSampClkTiming( self.taskHandle, "", float64(self.sampleRate), DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, uInt64(self.periodLength)))
