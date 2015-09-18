@@ -5,6 +5,7 @@ import numpy as np
 import digiports as dg
 import waveformthread as wft
 import matplotlib.pyplot as plt
+import nidaqmx
 
 class DegaussingController():
     def __init__(self):
@@ -64,12 +65,25 @@ class DegaussingController():
         #data = np.zeros( (periodLength, ), dtype = np.float64)
         return np.asarray(list(zip(t,data)))
 
+    """
     def playWaveform(self, device, waveform, sampleRate=20000):
         self.mythread = wft.WaveformThread(device, waveform, sampleRate)
         self.mythread.start()
         self.mythread.join()
         self.mythread.__del__()
-        self.mythread = None
+        self.mythread = None 
+    """
+
+    def playWaveform(self, device, waveform):
+        data = waveform[:,1]
+        task = nidaqmx.AnalogOutputTask()
+        task.create_voltage_channel("Dev1/ao0", min_val = 10.0, max_val = 10.0)
+        task.configure_timing_sample_clock(rate = 20000)
+        task.write(data, auto_start=False)
+        task.start()
+        task.wait_until_done(110)
+        task.stop()
+        del task
 
     def abortWaveform(self):
         if self.mythread:
