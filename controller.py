@@ -85,7 +85,7 @@ class DegaussingController():
             self.task.clear()
             del self.task
 
-    def run_deg(self, sett):
+    def run_deg(self, conf, sett):
         self._running = True
         dev = self.configs[self.settings[sett]["Config"]]["Device"]
         print(self.settings[sett])
