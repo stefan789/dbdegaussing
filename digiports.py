@@ -9,7 +9,7 @@ class VoltageDivider():
         self.output_str = dev+"/port0/line16:23"
         self.dotask = nidaqmx.DigitalOutputTask()
         self.dotask.create_channel(self.output_str)
-    
+
     def resetall(self):
         ddat = np.ones(8, dtype = np.uint8)
         ddat[6] = 0
@@ -25,7 +25,7 @@ class VoltageDivider():
         self.dotask.write(ddat, auto_start = True, layout = "group_by_channel")
         time.sleep(1)
         ddat[nr] = 1
-        self.dotask.write(ddat, auto_start = True, layout = "group_by_channel")        
+        self.dotask.write(ddat, auto_start = True, layout = "group_by_channel")
 
 class DigitalInput():
     def __init__(self, dev):
@@ -72,18 +72,12 @@ class SwitchCoil():
             for a in curon:
                 self.do.switch(a)
         pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
-        #print self.di.read()
 
-#    def activate(self, nr):
-#        self.do.switch(nr)
-#        time.sleep(1)
-#        pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
-    
     def deactivate(self, nr):
         self.do.switch(nr)
         time.sleep(1)
-        pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))   
-        
+        pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
+
     def activate(self, nr):
         if nr > self.nrchans-1:
             pass
@@ -103,4 +97,3 @@ class SwitchCoil():
         else:
             self.do.switch(nr)
             pub.sendMessage("status.update", status="Switching relay %s" % str(nr))
-            

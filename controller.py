@@ -1,6 +1,6 @@
 import cloudant
 import json
-#import pynedm
+import pynedm
 import numpy as np
 import digiports as dg
 import waveformthread as wft
@@ -66,31 +66,23 @@ class DegaussingController():
         data = x
         return np.asarray(list(zip(t,data)), dtype=np.float64)
 
-    """
-    def playWaveform(self, device, waveform, sampleRate=20000):
-        self.mythread = wft.WaveformThread(device, waveform, sampleRate)
-        self.mythread.start()
-        self.mythread.join()
-        self.mythread.__del__()
-        self.mythread = None 
-    """
-    
     def playWaveform(self, device, amp, freq, duration, keeptime, offset, sampleRate=10000.0):
         t = np.linspace(0, duration, duration*sampleRate + 1)
         x = np.asarray(offset + ( (-1) * np.sin( 2*np.math.pi * freq * t ) * np.piecewise(t, [t<keeptime, t>=keeptime], [amp, lambda t: -((t-keeptime) * amp/(duration-keeptime))+amp])), dtype=np.float64)
-        task = nidaqmx.AnalogOutputTask()
-        task.create_voltage_channel("Dev1/ao0", min_val=-10.0, max_val=10.0)
-        task.configure_timing_sample_clock(rate=sampleRate, sample_mode = 'finite' , samples_per_channel = len(x))
-        task.write(x, auto_start=False, layout='group_by_channel')
-        task.start()
-        task.wait_until_done(duration + 5)
-        task.stop()
-        del task
+        self.task = nidaqmx.AnalogOutputTask()
+        self.task.create_voltage_channel("Dev1/ao0", min_val=-10.0, max_val=10.0)
+        self.task.configure_timing_sample_clock(rate=sampleRate, sample_mode = 'finite' , samples_per_channel = len(x))
+        self.task.write(x, auto_start=False, layout='group_by_channel')
+        self.task.start()
+        self.task.wait_until_done(duration + 5)
+        self.task.stop()
+        del self.task
 
-    def abort_deg(self):
-        if self.mythread:
-            self._running = False
-            self.mythread.stop()
+    def interrupt_deg(self):
+        if self._running:
+            self.task.stop()
+            self.task.clear()
+            del self.task
 
     def run_deg(self, sett):
         self._running = True
@@ -121,4 +113,8 @@ class DegaussingController():
             else:
                 self.coilswitcher.alloff()
                 self.voltagedivider.resetall()
+        self._running = False
 
+
+    def isrunning(self):
+        return self._running
