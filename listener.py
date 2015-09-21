@@ -1,10 +1,10 @@
 import pynedm
-import controllerluu as controller
+import controller as controller
 
 _db = "nedm%2Fdegaussing"
-po = pynedm.ProcessObject("http://localhost:5984",
+po = pynedm.ProcessObject("http://raid.nedm1:5984",
         "stefan",
-        "root")
+        "hanger")
 
 _dg = controller.DegaussingController()
 _dgprocess = None
@@ -47,7 +47,7 @@ adict =  {
 
 pylisten = pynedm.listen(adict, "nedm%2Fdegaussing",
                 username="stefan",
-                password="root",
-                uri="http://localhost:5984")
+                password="hanger",
+                uri="http://raid.nedm1:5984")
 
 pylisten.wait()

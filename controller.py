@@ -13,6 +13,7 @@ class DegaussingController():
         self.settings = self._getsettings()
         self.voltagedivider = dg.VoltageDivider("Dev1")
         self.coilswitcher = dg.SwitchCoil("Dev1")
+	self._running = False
 
     def _getconfigs(self):
         acct = cloudant.Account(uri="http://raid.nedm1")
@@ -36,7 +37,7 @@ class DegaussingController():
 
     def _getsettings(self):
         acct = cloudant.Account(uri="http://raid.nedm1")
-        res = acct.login("internal_coils_writer", "clu$terXz")
+        res = acct.login("stefan", "hanger")
 
         #acct = cloudant.Account(uri="http://localhost:5984")
         #res = acct.login("stefan", "root")
