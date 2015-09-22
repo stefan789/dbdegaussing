@@ -16,7 +16,9 @@ def run_deg(t):
     def f():
         print(_dg.isrunning())
         print("run_deg called with t = {}".format(t))
+        pynedm.write_document_to_db({ "type": "data", "value": {"degaussing_state": 1} })
         _dg.run_deg(t)
+        pynedm.write_document_to_db({ "type": "data", "value": {"degaussing_state": 0} })
         print("run_deg done")
 
     if _dgprocess is not None:

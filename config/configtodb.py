@@ -9,10 +9,10 @@ def readconfig(conf):
     return sources
 
 parser = argparse.ArgumentParser()
-parser.add_argument("fname", help=".dict settings file to be uploaded to db")
+parser.add_argument("fname", help=".dict config file to be uploaded to db")
 args = parser.parse_args()
 
-settings = readconfig(args.fname)
+conf = readconfig(args.fname)
 
 acct = cloudant.Account(uri="http://raid.nedm1")
 res = acct.login("stefan", "hanger")
@@ -27,7 +27,7 @@ des = db.design("nedm_default")
 adoc = {
             "_id" : args.fname[:-5],
             "type": "deg_config",
-            "value": settings
+            "value": conf
             }
 orig_data_doc = des.post("_update/insert_with_timestamp",params=adoc).json()
 print orig_data_doc

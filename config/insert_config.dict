@@ -72,7 +72,7 @@
         "VoltageDivider": 5
     },
     "cyl": {
-        "Amp": 1.5,
+        "Amp": 9.5,
         "Freq": 10,
         "Dur": 100,
         "Keep": 10,
