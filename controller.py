@@ -81,11 +81,9 @@ class DegaussingController():
 
     def interrupt_deg(self):
     	print("controller interrupt")
-        #if self._running:
-	print("ending")
-	self._running = False
+        self._running = False
         self.task.clear()
-	print("task deleted")
+        print("task deleted")
 
     def run_deg(self, sett):
         self._running = True
