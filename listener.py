@@ -1,5 +1,8 @@
 import pynedm
-import controller as controller
+import controller
+import logging
+logging.basicConfig(level=logging.DEBUG)
+print pynedm.__file__
 
 _db = "nedm%2Fdegaussing"
 po = pynedm.ProcessObject("http://raid.nedm1:5984",
@@ -7,11 +10,10 @@ po = pynedm.ProcessObject("http://raid.nedm1:5984",
         "hanger")
 
 _dg = controller.DegaussingController()
-_dgprocess = None
 
 
 def run_deg(t):
-    global _dg, _dgprocess
+    print("listener run_deg called")
     
     def f():
         print(_dg.isrunning())
@@ -21,22 +23,22 @@ def run_deg(t):
         pynedm.write_document_to_db({ "type": "data", "value": {"degaussing_state": 0} })
         print("run_deg done")
 
-    if _dgprocess is not None:
+    if _dg.isrunning():
         print("in progress")
         raise Exception("Degaussing in progress")
 
-    _dgprocess = pynedm.start_process(f)
+
+    pynedm.start_process(f)
     return True
 
 def isrunning():
-    global _dg
     print("isrunning called")
     print(_dg.isrunning())
     return _dg.isrunning()
 
 def interrupt_deg():
-    global _dg, _dgprocess
-    if _dgprocess is None:
+    print("interrupt called")
+    if not _dg.isrunning():
         print("not in progress")
         raise Exception("Degaussing not in progress")
     _dg.interrupt_deg()
@@ -50,6 +52,7 @@ adict =  {
 pylisten = pynedm.listen(adict, "nedm%2Fdegaussing",
                 username="stefan",
                 password="hanger",
-                uri="http://raid.nedm1:5984")
+                uri="http://raid.nedm1:5984", verbose=True)
 
 pylisten.wait()
+print "Finished"

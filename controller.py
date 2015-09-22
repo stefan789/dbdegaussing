@@ -80,15 +80,17 @@ class DegaussingController():
         del self.task
 
     def interrupt_deg(self):
-        if self._running:
-            self.task.stop()
-            self.task.clear()
-            del self.task
+    	print("controller interrupt")
+        #if self._running:
+	print("ending")
+	self._running = False
+        self.task.clear()
+	print("task deleted")
 
     def run_deg(self, sett):
         self._running = True
         dev = self.configs[self.settings[sett]["Config"]]["Device"]
-        print(self.settings[sett])
+        print("controller run_deg called: {}".format(self.settings[sett]))
         for coil in self.settings[sett]["Sequence"]:
             if self._running:
                 cs = self.configs[self.settings[sett]["Config"]][coil]
@@ -112,6 +114,7 @@ class DegaussingController():
                 print("voltagedivider reset all")
                 self.voltagedivider.resetall()
             else:
+	    	self._running = False
                 self.coilswitcher.alloff()
                 self.voltagedivider.resetall()
         self._running = False
