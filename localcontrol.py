@@ -38,7 +38,4 @@ def interrupt_deg():
     r = des.post("_update/insert_with_timestamp", params=adoc).json()
     print(r)
 
-rundeg("insert_cyl")
-time.sleep(2)
-isrunning()
 
