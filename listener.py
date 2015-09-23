@@ -7,7 +7,8 @@ print pynedm.__file__
 _db = "nedm%2Fdegaussing"
 po = pynedm.ProcessObject("http://raid.nedm1:5984",
         "stefan",
-        "hanger")
+        "hanger",
+	_db)
 
 _dg = controller.DegaussingController()
 
