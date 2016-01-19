@@ -1,7 +1,7 @@
 import pynedm
 import controller
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 print pynedm.__file__
 
 _db = "nedm%2Fdegaussing"
@@ -19,9 +19,11 @@ def run_deg(t):
     def f():
         print(_dg.isrunning())
         print("run_deg called with t = {}".format(t))
-        print(po.write_document_to_db({ "type": "data", "value": {"degaussing_state": 1} }))
+        print(po.write_document_to_db(
+            { "type": "data", "value": {"degaussing_state": 1} }))
         _dg.run_deg(t)
-        print(po.write_document_to_db({ "type": "data", "value": {"degaussing_state": 0} }))
+        print(po.write_document_to_db(
+            { "type": "data", "value": {"degaussing_state": 0} }))
         print("run_deg done")
 
     if _dg.isrunning():
