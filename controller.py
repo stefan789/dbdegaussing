@@ -25,9 +25,15 @@ class DegaussingController():
 
     def poststatus(self, status):
         print(status)
-        status = str([int(i) for i in status[1:-1].split(" ")])
+        status = [int(i) for i in status[1:-1].split(" ")]
         print(self.po.write_document_to_db(
-                {"type": "data", "value":{"relay_states": status}}
+                {
+                    "type" : "data", 
+                    "value" : 
+                    {
+                        "relay_states" : dict([("relay_{}".format(i), status[i]) for i in range(4)])
+                    }
+                }
         ))
 
     def _getconfigs(self):
