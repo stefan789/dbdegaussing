@@ -25,6 +25,7 @@ class DegaussingController():
 
     def poststatus(self, status):
         print(status)
+        status = str([int(i) for i in status[1:-1].split(" ")])
         print(self.po.write_document_to_db(
                 {"type": "data", "value":{"relay_states": status}}
         ))
