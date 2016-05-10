@@ -94,6 +94,7 @@ class SwitchCoil():
             if curstate[nr] == 1:
                 self.do.switch(nr)
             pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
+            pub.sendMessage("relay.update", status="Relay states: %s" % str(self.di.read()))
         else:
             self.do.switch(nr)
             pub.sendMessage("status.update", status="Switching relay %s" % str(nr))

@@ -6,14 +6,28 @@ import digiports as dg
 import waveformthread as wft
 import matplotlib.pyplot as plt
 import nidaqmx
+from wx.lib.pubsub import pub
 
 class DegaussingController():
     def __init__(self):
+        _db = "nedm%2Fdegaussing"
+        self.po = pynedm.ProcessObject("http://raid.nedm1:5984",
+            "stefan",
+            "hanger",
+	    _db)
+
         self.configs = self._getconfigs()
         self.settings = self._getsettings()
         self.voltagedivider = dg.VoltageDivider("Dev1")
         self.coilswitcher = dg.SwitchCoil("Dev1")
-	self._running = False
+    	self._running = False
+        pub.subscribe(self.poststatus, "relay.update")
+
+    def poststatus(self, status):
+        print(status)
+        #self.po.write_document_to_db(
+        #        {"type": "data", "value":{"relay_states": [1,1,1,1]}}
+        #    )
 
     def _getconfigs(self):
         acct = cloudant.Account(uri="http://raid.nedm1")
@@ -102,6 +116,7 @@ class DegaussingController():
                 # activate coil
                 print("setting relay {}".format(cs["RelayPort"]))
                 self.coilswitcher.activate(cs["RelayPort"])
+                
                 # play waveform
                 print("start waveform")
                 self.playWaveform(dev, cs['Amp'], cs['Freq'] ,cs['Dur'], cs['Keep'], 0)
