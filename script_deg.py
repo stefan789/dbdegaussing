@@ -2,8 +2,8 @@ import pynedm
 import time
 
 _server = "http://raid.nedm1:5984/"
-_un = ""
-_pw = ""
+_un = "stefan"
+_pw = "hanger"
 _db = "nedm%2Fdegaussing"
 
 po = pynedm.ProcessObject(uri=_server, username=_un, password=_pw, adb=_db)
@@ -16,7 +16,11 @@ def is_running():
         }
     r = po.write_document_to_db(adoc)
     time.sleep(1)
-    rdoc = po.acct[po.db][r["id"]].get().json()
+    try:
+        rdoc = po.acct[po.db][r["id"]].get().json()
+    except:
+        time.sleep(1)
+        rdoc = po.acct[po.db][r["id"]].get().json()
     return rdoc["response"]["return"]
 
 def rundeg(t):
