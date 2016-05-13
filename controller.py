@@ -26,15 +26,14 @@ class DegaussingController():
     def poststatus(self, status):
         print(status)
         status = [int(i) for i in status[1:-1].split(" ")]
-        print(self.po.write_document_to_db(
-                {
+        adoc = {
                     "type" : "data", 
-                    "value" : 
-                    {
-                        "relay_states" : dict([("relay_{}".format(i), status[i]) for i in range(4)])
-                    }
+                    "value" : dict(
+                    [("relay_{}".format(i), status[i]) for i in range(4)])
                 }
-        ))
+        
+        print(adoc)
+        print(self.po.write_document_to_db(adoc))
 
     def _getconfigs(self):
         acct = cloudant.Account(uri="http://raid.nedm1")

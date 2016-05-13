@@ -84,6 +84,7 @@ class SwitchCoil():
         elif nr < 4:
             curstate = self.di.read()
             if 0 in curstate:
+                time.sleep(0.3)
                 curon = np.where(curstate==0)[0]
                 print curon
                 for a in curon:
