@@ -66,11 +66,21 @@ class SwitchCoil():
 
     def alloff(self):
         curstate = self.di.read()
+        time.sleep(0.5)
         if 0 in curstate:
             curon = np.where(curstate==0)[0]
             #print curon
             for a in curon:
                 self.do.switch(a)
+        # check if off
+        # state = self.di.read()
+        # time.sleep(0.5)
+        # if 0 in state:
+        #   curon = np.where(state==0)[0]
+        #   for a in curon:
+        #       self.do.switch(a)
+        # else:
+        #   pass
         pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
 
     def deactivate(self, nr):
@@ -83,8 +93,8 @@ class SwitchCoil():
             pass
         elif nr < 4:
             curstate = self.di.read()
+            time.sleep(0.5)
             if 0 in curstate:
-                time.sleep(0.3)
                 curon = np.where(curstate==0)[0]
                 print curon
                 for a in curon:
@@ -94,6 +104,10 @@ class SwitchCoil():
                 pass
             if curstate[nr] == 1:
                 self.do.switch(nr)
+                # state = self.di.read()
+                # time.sleep(0.5)
+                # if state[nr] != 0:
+                #     self.do.switch(nr)
             pub.sendMessage("status.update", status="Relay states: %s" % str(self.di.read()))
             pub.sendMessage("relay.update", status="%s" % str(self.di.read()))
         else:

@@ -28,8 +28,13 @@ class DegaussingController():
         status = [int(i) for i in status[1:-1].split(" ")]
         adoc = {
                     "type" : "data", 
-                    "value" : dict(
-                    [("relay_{}".format(i), status[i]) for i in range(4)])
+                    "value" : 
+                    {
+                        "state_0": status[0],
+                        "state_1": status[1],
+                        "state_2": status[2],
+                        "state_3": status[3]
+                    }
                 }
         
         print(adoc)
@@ -136,6 +141,7 @@ class DegaussingController():
 	    	self._running = False
                 self.coilswitcher.alloff()
                 self.voltagedivider.resetall()
+        pub.sendMessage("relay.update", status="%s" % str(self.coilswitcher.di.read()))
         self._running = False
 
 
